@@ -68,3 +68,44 @@ func TestGetEnvBoolDefault(t *testing.T) {
 	}
 
 }
+
+func TestGetEnvString(t *testing.T) {
+	os.Unsetenv("TESTSTR")
+	defer os.Unsetenv("TESTSTR")
+	var env string
+	var err error
+	var want string
+
+	// Unset
+	want = ""
+	env, err = GetEnvString("TESTSTR")
+	if err == nil {
+		t.Errorf("Unset error not thrown")
+	}
+	if want != env {
+		t.Errorf("Expected %v, got %v", want, env)
+	}
+
+	// Empty
+	os.Setenv("TESTSTR", "")
+	want = ""
+	env, err = GetEnvString("TESTSTR")
+	if err == nil {
+		t.Errorf("Empty error not thrown")
+	}
+	if want != env {
+		t.Errorf("Expected %v, got %v", want, env)
+	}
+
+	// Set
+	os.Setenv("TESTSTR", "Get")
+	want = "Get"
+	env, err = GetEnvString("TESTSTR")
+	if err != nil {
+		t.Errorf("Error unexpectatntly thrown: %v", err)
+	}
+	if want != env {
+		t.Errorf("Expected %v, got %v", want, env)
+	}
+
+}

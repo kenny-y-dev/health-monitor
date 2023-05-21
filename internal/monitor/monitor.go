@@ -8,7 +8,7 @@ import (
 )
 
 func Send() ping.Statistics {
-	pinger, err := ping.NewPinger("10.123.123.123")
+	pinger, err := ping.NewPinger("8.8.8.8")
 	if err != nil {
 		log.Fatalf("Pinger creation failed with error: %v", err)
 	}

@@ -46,12 +46,20 @@ func GetEnvBoolDefault(name string, def bool) (bool, error) {
 }
 
 func GetEnvString(name string) (string, error) {
-	env, def := os.LookupEnv(name)
-	if !def {
+	env, set := os.LookupEnv(name)
+	if !set {
 		return env, fmt.Errorf("Environment variable %v is unset", name)
 	}
 	if env == "" {
 		return env, fmt.Errorf("Environment variable %v is set, but empty", name)
 	}
 	return env, nil
+}
+
+func GetEnvStringDefault(name string) (string, error) {
+	panic("Not implemented yet")
+	//env, def := os.LookupEnv(name)
+	//if !def {
+
+	//}
 }
