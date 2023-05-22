@@ -7,8 +7,8 @@ import (
 	"github.com/go-ping/ping"
 )
 
-func Send() ping.Statistics {
-	pinger, err := ping.NewPinger("8.8.8.8")
+func Send(target string) ping.Statistics {
+	pinger, err := ping.NewPinger(target)
 	if err != nil {
 		log.Fatalf("Pinger creation failed with error: %v", err)
 	}

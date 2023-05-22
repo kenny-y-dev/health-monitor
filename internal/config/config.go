@@ -9,6 +9,7 @@ import (
 type MonitorConfig struct {
 	MonitorHost       string
 	MonitorHostStrict bool
+	MonitorTimeout    string
 }
 
 func Build() MonitorConfig {
@@ -56,10 +57,13 @@ func GetEnvString(name string) (string, error) {
 	return env, nil
 }
 
-func GetEnvStringDefault(name string) (string, error) {
-	panic("Not implemented yet")
-	//env, def := os.LookupEnv(name)
-	//if !def {
-
-	//}
+func GetEnvStringDefault(name string, def string) (string, error) {
+	env, set := os.LookupEnv(name)
+	if !set {
+		return def, fmt.Errorf("Environment variable %v is unset, returning default", name)
+	}
+	if env == "" {
+		return def, fmt.Errorf("Environment variable %v is set but empty, returning default", name)
+	}
+	return env, nil
 }
