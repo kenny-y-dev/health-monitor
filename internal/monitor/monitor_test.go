@@ -11,14 +11,14 @@ func TestCheckSuccess(t *testing.T) {
 		PacketsRecv: 2,
 		PacketsSent: 3,
 	}
-	if !CheckSuccess(testStats, false) {
+	if !CheckSuccessPing(testStats, false) {
 		t.Errorf("Expected CheckSuccess to return True, returned False")
 	}
-	if CheckSuccess(testStats, true) {
+	if CheckSuccessPing(testStats, true) {
 		t.Errorf("Expected CheckSuccess to return False, returned True")
 	}
 	*&testStats.PacketsRecv = 0
-	if CheckSuccess(testStats, false) {
+	if CheckSuccessPing(testStats, false) {
 		t.Errorf("Expected CheckSuccess to return False, returned True")
 	}
 

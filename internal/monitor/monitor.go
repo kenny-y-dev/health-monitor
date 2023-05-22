@@ -7,7 +7,7 @@ import (
 	"github.com/go-ping/ping"
 )
 
-func Send(target string) ping.Statistics {
+func SendPing(target string) ping.Statistics {
 	pinger, err := ping.NewPinger(target)
 	if err != nil {
 		log.Fatalf("Pinger creation failed with error: %v", err)
@@ -25,7 +25,7 @@ func Send(target string) ping.Statistics {
 	return *pinger.Statistics()
 }
 
-func CheckSuccess(stats ping.Statistics, strict bool) bool {
+func CheckSuccessPing(stats ping.Statistics, strict bool) bool {
 	if stats.PacketsRecv == 0 {
 		return false
 	}

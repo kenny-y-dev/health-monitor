@@ -8,6 +8,6 @@ import (
 
 func main() {
 	cfg := config.Build()
-	monitor.Send(cfg.MonitorTarget)
+	monitor.SendPing(cfg.MonitorTarget)
 	notify.Send(cfg.NotifyTarget)
 }
