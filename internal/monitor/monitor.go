@@ -1,28 +1,28 @@
 package monitor
 
 import (
-	"log"
+	"fmt"
 	"time"
 
 	"github.com/go-ping/ping"
 )
 
-func SendPing(target string) ping.Statistics {
+func SendPing(target string, timeout string) (ping.Pinger, error) {
 	pinger, err := ping.NewPinger(target)
 	if err != nil {
-		log.Fatalf("Pinger creation failed with error: %v", err)
+		return *pinger, fmt.Errorf("Pinger creation failed with error: %w", err)
 	}
 
 	pinger.Count = 3
-	pinger.Timeout, err = time.ParseDuration("5s")
+	pinger.Timeout, err = time.ParseDuration(timeout)
 	if err != nil {
-		log.Fatalf("Timeout parsing failed with error: %v", err)
+		return *pinger, fmt.Errorf("Timeout parsing failed with error: %w", err)
 	}
 	err = pinger.Run()
 	if err != nil {
-		log.Fatalf("Ping failed with error: %v", err)
+		return *pinger, fmt.Errorf("Unable to run ping: %w", err)
 	}
-	return *pinger.Statistics()
+	return *pinger, nil
 }
 
 func CheckSuccessPing(stats ping.Statistics, strict bool) bool {
