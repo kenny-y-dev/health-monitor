@@ -10,9 +10,11 @@ type MonitorConfig struct {
 	MonitorHost       string
 	MonitorHostStrict bool
 	MonitorTimeout    string
+	NotifyHost        string
 }
 
 func Build() MonitorConfig {
+	// TODO make sure monitor host is an IP or hostname
 	monitorHost, err := GetEnvString("MONITOR_HOST")
 	if err != nil {
 		log.Fatalf("MONITOR_HOST: %v", err)
@@ -22,9 +24,21 @@ func Build() MonitorConfig {
 		log.Printf("Using default value of %v for MONITOR_HOST_STRICT", monitorHostStrict)
 	}
 
+	monitorTimeout, err := GetEnvStringDefault("MONITOR_TIMEOUT", "5s")
+	if err != nil {
+		log.Printf("Using default value of %v for MONITOR_TIMEOUT", monitorTimeout)
+	}
+
+	notifyHost, err := GetEnvString("NOTIFY_HOST")
+	if err != nil {
+		log.Fatalf("NOTIFY_HOST: %v", err)
+	}
+
 	return MonitorConfig{
 		MonitorHost:       monitorHost,
 		MonitorHostStrict: monitorHostStrict,
+		MonitorTimeout:    monitorTimeout,
+		NotifyHost:        notifyHost,
 	}
 }
 
