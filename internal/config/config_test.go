@@ -148,3 +148,25 @@ func TestGetEnvStringDefault(t *testing.T) {
 		t.Errorf("Expected %v, got %v", want, env)
 	}
 }
+
+func TestValidateMethod(t *testing.T) {
+	var tests = []struct {
+		value string
+		want  bool
+	}{
+		{"testing123", false},
+		{"get", true},
+		{"post", true},
+		{"put", true},
+	}
+
+	for _, v := range tests {
+		t.Run(v.value, func(t *testing.T) {
+			result := ValidateNotifyMethod(v.value)
+			if result != v.want {
+				t.Errorf("Expected %v, got %v", v.want, result)
+			}
+		})
+	}
+
+}

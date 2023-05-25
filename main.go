@@ -13,8 +13,7 @@ func main() {
 	cfg := config.Build()
 	pinger, err := monitor.SendPing(cfg.MonitorTarget, cfg.MonitorTimeout)
 	if err != nil {
-		// TODO implement retry
-		log.Fatalf("Ping failed with error %v", err)
+		log.Fatalf("Ping module failed %v", err)
 	}
 	up := monitor.CheckSuccessPing(*pinger.Statistics(), cfg.MonitorCheckStrict)
 	if up != status {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
 type MonitorConfig struct {
@@ -11,6 +12,7 @@ type MonitorConfig struct {
 	MonitorCheckStrict bool
 	MonitorTimeout     string
 	NotifyTarget       string
+	NotifyMethod       string
 }
 
 func Build() MonitorConfig {
@@ -34,11 +36,21 @@ func Build() MonitorConfig {
 		log.Fatalf("NOTIFY_TARGET: %v", err)
 	}
 
+	notifyMethod, err := GetEnvString("NOTIFY_METHOD")
+	if err != nil {
+		log.Fatalf("NOTIFY_METHOD: %v", err)
+	}
+	notifyMethod = strings.ToLower(notifyMethod)
+	if !ValidateNotifyMethod(notifyMethod) {
+		log.Fatalf("NOTIFY_METHOD not set to valid or implemented HTTP method")
+	}
+
 	return MonitorConfig{
 		MonitorTarget:      monitorTarget,
 		MonitorCheckStrict: monitorCheckStrict,
 		MonitorTimeout:     monitorTimeout,
 		NotifyTarget:       notifyTarget,
+		NotifyMethod:       notifyMethod,
 	}
 }
 
@@ -50,7 +62,8 @@ func GetEnvBoolDefault(name string, def bool) (bool, error) {
 	if env == "" {
 		return def, fmt.Errorf("Environment variable %v is set but empty, returning default", name)
 	}
-	if env != "True" && env != "true" && env != "False" && env != "false" {
+	env = strings.ToLower(env)
+	if env != "true" && env != "false" {
 		return def, fmt.Errorf("Environment variable %v has invalid value %v, returning default", name, env)
 	}
 	if env == "True" || env == "true" {
@@ -80,4 +93,18 @@ func GetEnvStringDefault(name string, def string) (string, error) {
 		return def, fmt.Errorf("Environment variable %v is set but empty, returning default", name)
 	}
 	return env, nil
+}
+
+func ValidateNotifyMethod(value string) bool {
+	methods := map[string]bool{"get": true, "post": true, "put": true}
+	return CheckValidValue(value, methods)
+}
+
+func CheckValidValue(value string, valid map[string]bool) bool {
+	_, found := valid[value]
+	if found {
+		return true
+	} else {
+		return false
+	}
 }
