@@ -8,6 +8,8 @@ import (
 )
 
 type MonitorConfig struct {
+	// TODO look at turning monitor target and notify into slices for multiple targets/notices
+	// TODO multiple targets/notices may be good use for async; though ping may block
 	MonitorTarget      string
 	MonitorCheckStrict bool
 	MonitorTimeout     string
