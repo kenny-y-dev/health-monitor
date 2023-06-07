@@ -5,15 +5,15 @@ import (
 	"net/http"
 )
 
-func SendFailure(target string) error {
+func SendFailure(target string) (*http.Response, error) {
 	// TODO refactor to change http methods, add auth, add body/payload
-	resp, err := http.Get(target)
+	res, err := http.Get(target)
 	if err != nil {
 		log.Fatalf("Http GET failed")
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
 	// TODO create error path for retry
-	return nil
+	return res, nil
 }
 
 func SendSuccss(target string) error {
