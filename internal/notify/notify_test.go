@@ -6,25 +6,20 @@ import (
 	"testing"
 )
 
-var failurevalues = []struct {
+var httpreqvalues = []struct {
 	method string
 	body   []byte
 }{
 	{"GET", []byte(`{"test": "value"}`)},
+	{"GET", nil},
 	{"PUT", []byte(`{"test": "value"}`)},
+	{"PUT", nil},
 	{"POST", []byte(`{"test": "value"}`)},
+	{"POST", nil},
 }
 
-func TestFailure(t *testing.T) {
-	//	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	//		var want string
-	//		if r.Method != want {
-	//			t.Errorf("Wrong method, is %v instead of %v", r.Method, want)
-	//		}
-	//	}))
-	//	defer ts.Close()
-
-	for _, tt := range failurevalues {
+func TestHttpReq(t *testing.T) {
+	for _, tt := range httpreqvalues {
 		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			want := tt.method
 			if r.Method != want {
@@ -32,7 +27,7 @@ func TestFailure(t *testing.T) {
 			}
 		}))
 
-		res, err := Failure(tt.method, ts.URL, tt.body)
+		res, err := HttpReq(tt.method, ts.URL, tt.body)
 		// TODO read about json in golang: https://go.dev/blog/json
 		// Find best way to pass body to functions and support strings/json/etc
 		if err != nil {
@@ -40,6 +35,28 @@ func TestFailure(t *testing.T) {
 		}
 		if res.StatusCode != 200 {
 			t.Errorf("Return status was not 200. Status code: %v", res.StatusCode)
+		}
+		ts.Close()
+	}
+}
+
+var httpreqfailvalues = []struct {
+	method string
+	body   []byte
+}{
+	{"LOCK", nil},
+}
+
+func TestHttpReqFail(t *testing.T) {
+	for _, tt := range httpreqfailvalues {
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		}))
+
+		_, err := HttpReq(tt.method, ts.URL, tt.body)
+
+		if err == nil {
+			t.Log(err)
+			t.Errorf("HTTP request should have failed but did not. Test values were: %v, %v", tt.method, tt.body)
 		}
 		ts.Close()
 	}
