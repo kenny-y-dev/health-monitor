@@ -20,12 +20,12 @@ func main() {
 		status = !status
 		if !status {
 			log.Printf("Target failed monitor check")
-			notify.SendFailure(cfg.NotifyTarget)
+			notify.Failure("GET", cfg.NotifyTarget, nil)
 			// target down
 		}
 		if status {
 			log.Printf("Target healthy again")
-			notify.SendSuccss(cfg.NotifyTarget)
+			notify.Succss(cfg.NotifyTarget)
 		}
 	}
 }
