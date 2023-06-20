@@ -20,12 +20,20 @@ func main() {
 		status = !status
 		if !status {
 			log.Printf("Target failed monitor check")
-			notify.HttpReq(cfg.NotifyMethod, cfg.NotifyTarget, cfg.NotifyDownJSON)
+			res, err := notify.HttpReq(cfg.NotifyMethod, cfg.NotifyTarget, nil)
+			if err != nil {
+				log.Printf("Failed to notify target down with error: %v", err)
+			}
+			log.Printf("Sent Down notification to target, return code: %v", res.StatusCode)
 			// target down
 		}
 		if status {
 			log.Printf("Target healthy")
-			notify.HttpReq(cfg.NotifyMethod, cfg.NotifyTarget, cfg.NotifyUpJSON)
+			res, err := notify.HttpReq(cfg.NotifyMethod, cfg.NotifyTarget, cfg.NotifyUpJSON)
+			if err != nil {
+				log.Printf("Failed to notify target down with error: %v", err)
+			}
+			log.Printf("Sent Up notification to target, return code: %v", res.StatusCode)
 		}
 	}
 }

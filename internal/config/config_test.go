@@ -155,9 +155,9 @@ func TestValidateMethod(t *testing.T) {
 		want  bool
 	}{
 		{"testing123", false},
-		{"get", true},
-		{"post", true},
-		{"put", true},
+		{"GET", true},
+		{"POST", true},
+		{"PUT", true},
 	}
 
 	for _, v := range tests {

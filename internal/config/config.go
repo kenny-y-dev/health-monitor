@@ -44,7 +44,7 @@ func Build() MonitorConfig {
 	if err != nil {
 		log.Fatalf("NOTIFY_METHOD: %v", err)
 	}
-	notifyMethod = strings.ToLower(notifyMethod)
+	notifyMethod = strings.ToUpper(notifyMethod)
 	if !ValidateNotifyMethod(notifyMethod) {
 		log.Fatalf("NOTIFY_METHOD not set to valid or implemented HTTP method")
 	}
@@ -113,7 +113,7 @@ func GetEnvStringDefault(name string, def string) (string, error) {
 }
 
 func ValidateNotifyMethod(value string) bool {
-	methods := map[string]bool{"get": true, "post": true, "put": true}
+	methods := map[string]bool{"GET": true, "POST": true, "PUT": true}
 	return CheckValidValue(value, methods)
 }
 
