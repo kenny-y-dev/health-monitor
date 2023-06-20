@@ -20,12 +20,12 @@ func main() {
 		status = !status
 		if !status {
 			log.Printf("Target failed monitor check")
-			notify.HttpReq("GET", cfg.NotifyTarget, nil)
+			notify.HttpReq(cfg.NotifyMethod, cfg.NotifyTarget, cfg.NotifyDownJSON)
 			// target down
 		}
 		if status {
 			log.Printf("Target healthy")
-			notify.HttpReq("GET", cfg.NotifyTarget, nil)
+			notify.HttpReq(cfg.NotifyMethod, cfg.NotifyTarget, cfg.NotifyUpJSON)
 		}
 	}
 }

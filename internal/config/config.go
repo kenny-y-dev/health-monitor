@@ -15,6 +15,8 @@ type MonitorConfig struct {
 	MonitorTimeout     string
 	NotifyTarget       string
 	NotifyMethod       string
+	NotifyDownJSON     []byte
+	NotifyUpJSON       []byte
 }
 
 func Build() MonitorConfig {
@@ -46,6 +48,17 @@ func Build() MonitorConfig {
 	if !ValidateNotifyMethod(notifyMethod) {
 		log.Fatalf("NOTIFY_METHOD not set to valid or implemented HTTP method")
 	}
+	notifyDownJSONStr, err := GetEnvString("NOTIFY_DOWN_JSON")
+	if err != nil {
+		log.Fatalf("NOTIFY_DOWN_JSON is not valid")
+	}
+	notifyDownJSON := []byte(notifyDownJSONStr)
+
+	notifyUpJSONStr, err := GetEnvString("NOTIFY_UP_JSON")
+	if err != nil {
+		log.Fatalf("NOTIFY_UP_JSON is not valid")
+	}
+	notifyUpJSON := []byte(notifyUpJSONStr)
 
 	return MonitorConfig{
 		MonitorTarget:      monitorTarget,
@@ -53,6 +66,8 @@ func Build() MonitorConfig {
 		MonitorTimeout:     monitorTimeout,
 		NotifyTarget:       notifyTarget,
 		NotifyMethod:       notifyMethod,
+		NotifyDownJSON:     notifyDownJSON,
+		NotifyUpJSON:       notifyUpJSON,
 	}
 }
 
