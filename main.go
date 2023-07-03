@@ -29,8 +29,9 @@ func checkStatus(cfg config.MonitorConfig, status *bool) {
 			res, err := notify.HttpReq(cfg.NotifyMethod, cfg.NotifyTarget, cfg.NotifyDownJSON)
 			if err != nil {
 				log.Printf("Failed to notify target down with error: %v", err)
+			} else {
+				log.Printf("Sent Down notification to target, return code: %v", res.StatusCode)
 			}
-			log.Printf("Sent Down notification to target, return code: %v", res.StatusCode)
 			// target down
 		}
 		if *status {
@@ -38,8 +39,9 @@ func checkStatus(cfg config.MonitorConfig, status *bool) {
 			res, err := notify.HttpReq(cfg.NotifyMethod, cfg.NotifyTarget, cfg.NotifyUpJSON)
 			if err != nil {
 				log.Printf("Failed to notify target down with error: %v", err)
+			} else {
+				log.Printf("Sent Up notification to target, return code: %v", res.StatusCode)
 			}
-			log.Printf("Sent Up notification to target, return code: %v", res.StatusCode)
 		}
 	}
 }

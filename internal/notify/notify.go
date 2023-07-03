@@ -3,7 +3,9 @@ package notify
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"net/http"
+	"time"
 )
 
 func HttpReq(method string, target string, json_body []byte) (*http.Response, error) {
@@ -24,7 +26,22 @@ func HttpReq(method string, target string, json_body []byte) (*http.Response, er
 	}
 	res, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("HTTP request failed with error: %w", err)
+		log.Printf("HTTP request failed, retrying")
+		try := 3
+		count := 0
+		for {
+			count += 1
+			log.Printf("Retry %v/%v", count, try)
+			res, err = client.Do(req)
+			if err == nil {
+				break
+			}
+			if count >= try {
+				return nil, fmt.Errorf("HTTP request failed with error: %w", err)
+			}
+			time.Sleep(3 * time.Second)
+		}
+
 	}
 	defer res.Body.Close()
 	// TODO create error path for retry
