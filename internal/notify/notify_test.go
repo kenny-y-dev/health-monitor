@@ -28,8 +28,6 @@ func TestHttpReq(t *testing.T) {
 		}))
 
 		res, err := HttpReq(tt.method, ts.URL, tt.body)
-		// TODO read about json in golang: https://go.dev/blog/json
-		// Find best way to pass body to functions and support strings/json/etc
 		if err != nil {
 			t.Errorf("Error in SendFailure request: %v", err)
 		}

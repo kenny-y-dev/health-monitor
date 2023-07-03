@@ -9,7 +9,7 @@ import (
 )
 
 func HttpReq(method string, target string, json_body []byte) (*http.Response, error) {
-	// TODO refactor to change http methods, add auth, add body/payload
+	// TODO add auth headers
 	validmethods := map[string]bool{
 		"GET":  true,
 		"PUT":  true,
@@ -44,6 +44,5 @@ func HttpReq(method string, target string, json_body []byte) (*http.Response, er
 
 	}
 	defer res.Body.Close()
-	// TODO create error path for retry
 	return res, nil
 }
