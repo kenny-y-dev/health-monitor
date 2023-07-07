@@ -125,3 +125,12 @@ func CheckValidValue(value string, valid map[string]bool) bool {
 		return false
 	}
 }
+
+func (mc MonitorConfig) PrintConfig() {
+	log.Printf("Starting monitoring with the following config:")
+	log.Printf("Monitor target: %v", mc.MonitorTarget)
+	log.Printf("Strict monitor checking: %v", mc.MonitorCheckStrict)
+	log.Printf("Monitor timeout: %v", mc.MonitorTimeout)
+	log.Printf("Notify target: %v", mc.NotifyTarget)
+	log.Printf("Notify method: %v", mc.NotifyMethod)
+}

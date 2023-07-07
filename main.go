@@ -10,6 +10,7 @@ import (
 
 func main() {
 	cfg := config.Build()
+	cfg.PrintConfig()
 	status := true
 	for {
 		checkStatus(cfg, &status)
